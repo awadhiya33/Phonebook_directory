@@ -29,7 +29,7 @@ public class ContactOperation_Implementations implements ContactOperation_decler
        //  System.out.println(rest.next()+ q);
          if (rest.next ())
          { 
-        	 return 1 ;
+        	 return rest.getInt(1) ;
          }
          else 
         	 return 0 ;
@@ -48,29 +48,21 @@ public class ContactOperation_Implementations implements ContactOperation_decler
 	}
 
 	@Override
-	public int addContact(Contact_Details c, String username) throws SQLException, ClassNotFoundException {
+	public int addContact(Contact_Details c, String username ,int j ) throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/phonebookdirectory", "root", "Vidyanshu@12");
 		
 		String query="insert into ContactDetails"
 				+"(firstName,lastName,phoneNumber,email,address,userId)"
 				+"values(?,?,?,?,? ,?)";
-		
-		Statement stm =con.createStatement();
-        ResultSet rs = stm.executeQuery("select userid from user where username = '"+ username +"'");
-		
-		
-		
-		System.out.println(rs.getInt(1));
+	
 		PreparedStatement ps=con.prepareStatement(query);
 		ps.setString(1, c.getFirstName());
 		ps.setString(2, c.getLastName());
 		ps.setString(3, c.getPhoneNmuber());
 		ps.setString(4, c.getEmail());
 		ps.setString(5,c.getAddress());
-		
-		
-		ps.setInt(6, rs.getInt(1));
+		ps.setInt(6, j);
 		
 		int i=ps.executeUpdate();
 		con.close();

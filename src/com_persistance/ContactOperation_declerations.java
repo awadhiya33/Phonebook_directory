@@ -10,7 +10,7 @@ public interface ContactOperation_declerations {
 	
 	public int Login(Login l) throws ClassNotFoundException, SQLException  ;
 	public int Register(Login l) throws ClassNotFoundException, SQLException ;
-	public int addContact(Contact_Details cd, String username ) throws ClassNotFoundException, SQLException ;
+	public int addContact(Contact_Details cd, String username ,int i) throws ClassNotFoundException, SQLException ;
 	public ArrayList<Contact_Details> SearchContact(String contact) throws ClassNotFoundException, SQLException ;
 	public int validatePhoneNumber (String phoneNumber)  throws ClassNotFoundException, SQLException ;
 	public int UpdateFirstName(String phoneNumber, String firstName) throws ClassNotFoundException, SQLException ;

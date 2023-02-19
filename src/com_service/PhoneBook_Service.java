@@ -17,8 +17,8 @@ public class PhoneBook_Service {
 		return new ContactOperation_Implementations().Register(l);
 	}
 
-	public int addContact(Contact_Details cd , String username)  throws ClassNotFoundException, SQLException{
-		return new ContactOperation_Implementations().addContact(cd ,username );
+	public int addContact(Contact_Details cd , String username, int j)  throws ClassNotFoundException, SQLException{
+		return new ContactOperation_Implementations().addContact(cd ,username ,j);
 	}
 
 	public ArrayList<Contact_Details> searchContact(String contact) throws ClassNotFoundException, SQLException {

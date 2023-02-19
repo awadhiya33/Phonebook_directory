@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com_entity.Contact_Details;
 import com_entity.Login;
@@ -15,7 +17,7 @@ public class Home {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		
 		while(true) {
-			System.out.println("1.Login \n 2.Register \n 3.Exit");
+			System.out.println("1.Login \n2.Register \n3.Exit");
 			int c=sc.nextInt();
 			
 			switch(c) {
@@ -41,7 +43,7 @@ public class Home {
 		int i= new PhoneBook_Service ().login(l);
 		if(i!=0) {
 			System.out.println("login done");
-			PhoneBook(l.getUserName());
+			PhoneBook(l.getUserName(),i );
 		}
 		else {
 			System.out.println("Enter correct details or user not exist");
@@ -54,17 +56,44 @@ private static void register() throws ClassNotFoundException, SQLException {
 		System.out.println("Enter username password");
 		
 		l.setUserName(sc.next());
-		l.setPassword(sc.next());
+		String pswd = sc.next();
+		while  ( !validatePassword (pswd )) {
+			System.out.println("Enter a valid password ");
+				pswd = sc.next();
+			}
+		
+			l.setPassword(pswd);
 		int i=new PhoneBook_Service().register(l);
 		if(i!=0) {
 			System.out.println("registration done");
+			return ;
 		}
 		else {
 			System.out.println("Enter correct details or user not exist");
 		}
 		
 	}
-	public  static void  PhoneBook(String username ) throws ClassNotFoundException, SQLException {
+	public  static boolean validatePassword(String pswd) {
+		
+	        String regex = "^(?=.*[0-9])"
+	                       + "(?=.*[a-z])(?=.*[A-Z])"
+	                       + "(?=.*[@#$%^&+=])"
+	                       + "(?=\\S+$).{8,20}$";
+	 
+	       
+	        Pattern p = Pattern.compile(regex);
+	 
+	      
+	        if (pswd == null) {
+	            return false;
+	        }
+	        Matcher m = p.matcher(pswd);
+	        
+	       
+	        return m.matches();
+}
+
+	public  static void  PhoneBook(String username  ,int j) throws ClassNotFoundException, SQLException {
 		int choice = 0;
 		do
 		{
@@ -72,7 +101,7 @@ private static void register() throws ClassNotFoundException, SQLException {
 				+ "2.Search \n"
 				+ "3.Update \n"
 				+ "4.Delete \n"
-				+ "5.Contact List "
+				+ "5.Contact List \n"
 				+ "6.Exit");
 		
 		 choice = sc.nextInt();
@@ -81,8 +110,16 @@ private static void register() throws ClassNotFoundException, SQLException {
 		{
 		case 1: 
 			System.out.println("Enter the Contact deatils : firstName ,lastName ,phoneNumber ,email,address ");
-			Contact_Details cd = new Contact_Details (sc.next(),sc.next(),sc.next(),sc.next(),sc.next());
-			int i = new PhoneBook_Service().addContact(cd,username);
+			String firstname = sc.next();
+			String lastname  = sc.next();
+			String phonenumber  = sc.next();
+			while  ( !isValidMobileNo (phonenumber )) {
+				System.out.println("Enter a valid phoneNumber ");
+					phonenumber  = sc.next();
+				}
+			
+			Contact_Details cd = new Contact_Details (firstname , lastname ,phonenumber ,sc.next(),sc.next());
+			int i = new PhoneBook_Service().addContact(cd,username ,j);
 			if (i != 0 )
 			{
 				System.out.println("added Contact ");
@@ -243,6 +280,16 @@ private static void register() throws ClassNotFoundException, SQLException {
 		
 	}while (choice != 6 );
 		}
+
+	public static boolean isValidMobileNo(String str)  
+	{  
+
+	Pattern ptrn = Pattern.compile("(0/91)?[7-9][0-9]{9}");  
+	 
+	Matcher match = ptrn.matcher(str);  
+	
+	return (match.find() && match.group().equals(str));  
+	}
 
 	
 
